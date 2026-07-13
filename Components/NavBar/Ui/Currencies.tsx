@@ -2,7 +2,18 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
-const Currencies = ({ currencyData }) => {
+interface CurrencyData {
+  pair: string
+  rate: string
+  change: string
+  isPositive: boolean
+}
+
+interface CurrenciesProps {
+  currencyData: CurrencyData[]
+}
+
+const Currencies = ({ currencyData }: CurrenciesProps) => {
   const width = useRef<HTMLAnchorElement>(null) 
   const [elemW,setW]= useState(0)
   useEffect(()=>{
@@ -27,7 +38,7 @@ const Currencies = ({ currencyData }) => {
            <div className={`min-w-[${elemW}px] border-x border-gray-100 px-4 h-full flex items-center gap-2 `}>
               {/* leave empty for better scroll behavior */}
           </div>
-          {currencyData.map((item, index) => (
+          {currencyData.map((item: CurrencyData, index: number) => (
             <div key={index} className={`w-full border-x border-neutral-500 px-4 h-full flex items-center gap-2`}>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="10" cy="10" r="10" fill={item.isPositive ? '#22c55e' : '#ef4444'} opacity="0.2"/>
@@ -45,4 +56,4 @@ const Currencies = ({ currencyData }) => {
   )
 }
 
-export default Currencies 
+export default Currencies
