@@ -55,7 +55,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                     <div className="w-full flex justify-between h-fit items-center">
                         <input 
                             type="text" 
-                            className="text-4xl font-bold border-none outline-none bg-transparent text-white w-40" 
+                            className="text-4xl font-bold border-none outline-none bg-transparent text-white w-40 placeholder:text-white" 
                             placeholder="1000"
                             value={valOne}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +89,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                 <button 
                     className="bg-[#202022] p-4 rounded-xl border border-white/5 hover:bg-[#2e2e2e] transition-colors"
                     onClick={() => {
-                        // Swap Send and RECEIVE
+                        
                         const temp = Send
                         setSend(RECEIVE)
                         setRECEIVE(temp)
