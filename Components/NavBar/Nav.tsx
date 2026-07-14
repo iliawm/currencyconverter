@@ -24,7 +24,6 @@ const Nav = async () => {
         const oldRate = oldData.rates.EUR
         
         const change = ((currentRate - oldRate) / oldRate) * 100
-        console.log(data)
         
         const pairs = [
             { from: 'USD', to: 'JPY' },
