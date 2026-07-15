@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 
 interface CurrencyData {
     base: string
@@ -18,18 +18,31 @@ const CheckRate = ({ data }: CheckRateProps) => {
     const [prices, setPrices] = useState<Record<string, number> | null>(null)
     const [valOne, setValOne] = useState<string>("")
     const [valTwo, setValTwo] = useState<string>("")
-    
+    const [menu,SetMenu]=useState(false)
+    const [menuReceive, SetMenuReceive] = useState(false)
+
+    const sortedCurrencies = useMemo(() => {
+        const popularCurrencies = ['USD', 'EUR', 'GBP'];
+        const allCurrencies = Array.from(new Set([data.base, ...Object.keys(currencies)]));
+        
+        const popular = allCurrencies.filter(c => popularCurrencies.includes(c));
+        const other = allCurrencies.filter(c => !popularCurrencies.includes(c)).sort();
+        
+        return { popular, other };
+    }, [currencies, data.base]);
+
     const handleFetch = async (): Promise<void> => {
         try {
             const response = await fetch(`/api/rates?from=${Send}`)
             const data = await response.json()
+            console.log(data)
+
             setPrices(data.rates)
         } catch (error) {
             console.error('Error fetching rates:', error)
         }
     }
     
-    // Auto-calculate whenever inputs change
     useEffect(() => {
         if (prices && RECEIVE && valOne && !isNaN(Number(valOne))) {
             const rate = prices[RECEIVE]
@@ -49,7 +62,6 @@ const CheckRate = ({ data }: CheckRateProps) => {
     return (
         <div className='flex-col w-full flex h-fit'>
             <div className='topcomp flex items-center justify-between gap-5 md:gap-8 border-b border-dotted border-gray-600 pb-5'>
-                {/* SEND Section */}
                 <div className='w-full h-fit bg-[#202022] flex flex-col p-4 rounded-2xl gap-8 py-4 border border-white/5'>
                     <h1 className="text-neutral-100/50 text-xs font-semibold">SEND</h1>
                     <div className="w-full flex justify-between h-fit items-center">
@@ -68,28 +80,70 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                 }
                             }}
                         />
-                        <select 
-                            className="border rounded-sm border-white/5 px-5 py-1 bg-[#2e2e2e] gap-2 flex cursor-pointer" 
-                            value={Send} 
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                setSend(e.target.value)
-                                setValOne("")
-                                setValTwo("")
-                            }}
+                        <div 
+                            className="border relative rounded-sm border-white/5 px-5 py-1 bg-[#2e2e2e] gap-2 flex cursor-pointer" 
+                            onClick={() => SetMenu(!menu)}
                         >
-                            <option value={data.base}>{data.base}</option>
-                            {Object.keys(currencies).map((currency: string, index: number) => (
-                                <option value={currency} key={index}>{currency}</option>
-                            ))}
-                        </select>
+                            
+                            <div className={`flex justify-between gap-2 items-center `}>
+                                <div className="flag"></div>
+                            <div>{Send}</div>
+                            <div className={`${menu?"rotate-180":"rotate-0"} transition-all ease-linear`}>
+                                <svg width="7" height="4" viewBox="0 0 7 4" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: 'rotate(180deg)' }}>
+                                <path d="M0.472271 0H6.49571C6.91758 0 7.12852 0.515625 6.82383 0.820312L3.82383 3.82031C3.63633 4.00781 3.33165 4.00781 3.14415 3.82031L0.144146 0.820312C-0.160541 0.515625 0.0503963 0 0.472271 0Z" fill="white"/>
+                                </svg>
+                            </div>
+
+                            </div>
+                            {menu && (
+                                <div className="absolute w-90 top-10 h-120 bg-[#202022] border border-gray-600 right-0 rounded-xl p-3 flex-col flex items-start gap-3 px-4 overflow-x-hidden overflow-y-scroll">
+                                    {sortedCurrencies.popular.length > 0 && (
+                                        <>
+                                            <div className="w-full text-xs font-semibold text-neutral-400 uppercase tracking-wider px-2">
+                                                POPULAR
+                                            </div>
+                                            {sortedCurrencies.popular.map((currency: string) => (
+                                                <button 
+                                                    key={currency} 
+                                                    className="w-full hover:border border-gray-600 flex justify-start p-3 rounded-lg cursor-pointer"
+                                                    onClick={() => {
+                                                        setSend(currency)
+                                                        SetMenu(false)
+                                                    }}
+                                                >
+                                                    {currency}
+                                                </button>
+                                            ))}
+                                        </>
+                                    )}
+                                    {sortedCurrencies.other.length > 0 && (
+                                        <>
+                                            <div className="w-full text-xs font-semibold text-neutral-400 uppercase tracking-wider px-2 border-t border-white/5 pt-2 mt-1">
+                                                OTHER CURRENCIES
+                                            </div>
+                                            {sortedCurrencies.other.map((currency: string) => (
+                                                <button 
+                                                    key={currency} 
+                                                    className="w-full hover:border border-gray-600 flex justify-start p-3 rounded-lg cursor-pointer"
+                                                    onClick={() => {
+                                                        setSend(currency)
+                                                        SetMenu(false)
+                                                    }}
+                                                >
+                                                    {currency}
+                                                </button>
+                                            ))}
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
-                {/* Swap Button */}
                 <button 
                     className="bg-[#202022] p-4 rounded-xl border border-white/5 hover:bg-[#2e2e2e] transition-colors"
                     onClick={() => {
-                        
                         const temp = Send
                         setSend(RECEIVE)
                         setRECEIVE(temp)
@@ -102,27 +156,73 @@ const CheckRate = ({ data }: CheckRateProps) => {
                     </svg>
                 </button>
 
-                {/* RECEIVE Section */}
                 <div className='w-full h-fit bg-[#202022] flex flex-col p-4 rounded-2xl gap-8 py-4 border border-white/5'>
                     <h1 className="text-neutral-100/50 text-xs font-semibold">RECEIVE</h1>
                     <div className="w-full flex justify-between h-fit items-center">
                         <div className="text-4xl font-bold text-[#cef739] w-40 truncate">
                             {valTwo || "0.00"}
                         </div>
-                        <select 
-                            className="border rounded-sm border-white/5 px-5 py-1 bg-[#2e2e2e] gap-2 flex cursor-pointer" 
-                            value={RECEIVE} 
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setRECEIVE(e.target.value)}
+                        <div 
+                            className="border relative rounded-sm border-white/5 px-5 py-1 bg-[#2e2e2e] gap-2 flex cursor-pointer"
+                            onClick={() => SetMenuReceive(!menuReceive)}
                         >
-                            {Object.keys(currencies).map((currency: string, index: number) => (
-                                <option value={currency} key={index}>{currency}</option>
-                            ))}
-                        </select>
+                            <div className={`flex justify-between gap-2 items-center `}>
+                                <div className="flag"></div>
+                            <div>{RECEIVE}</div>
+                            <div className={`${menuReceive?"rotate-180":"rotate-0"} transition-all ease-linear`}>
+                                <svg width="7" height="4" viewBox="0 0 7 4" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: 'rotate(180deg)' }}>
+                                <path d="M0.472271 0H6.49571C6.91758 0 7.12852 0.515625 6.82383 0.820312L3.82383 3.82031C3.63633 4.00781 3.33165 4.00781 3.14415 3.82031L0.144146 0.820312C-0.160541 0.515625 0.0503963 0 0.472271 0Z" fill="white"/>
+                                </svg>
+                            </div>
+
+                            </div>
+                            {menuReceive && (
+                                <div className="absolute w-90 top-10 h-120 bg-[#202022] border border-gray-600 right-0 rounded-xl p-3 flex-col flex items-start gap-3 px-4 overflow-x-hidden overflow-y-scroll">
+                                    {sortedCurrencies.popular.length > 0 && (
+                                        <>
+                                            <div className="w-full text-xs font-semibold text-neutral-400 uppercase tracking-wider px-2">
+                                                POPULAR
+                                            </div>
+                                            {sortedCurrencies.popular.map((currency: string) => (
+                                                <button 
+                                                    key={currency} 
+                                                    className="w-full hover:border border-gray-600 flex justify-start p-3 rounded-lg cursor-pointer"
+                                                    onClick={() => {
+                                                        setRECEIVE(currency)
+                                                        SetMenuReceive(false)
+                                                    }}
+                                                >
+                                                    {currency}
+                                                </button>
+                                            ))}
+                                        </>
+                                    )}
+                                    {sortedCurrencies.other.length > 0 && (
+                                        <>
+                                            <div className="w-full text-xs font-semibold text-neutral-400 uppercase tracking-wider px-2 border-t border-white/5 pt-2 mt-1">
+                                                OTHER CURRENCIES
+                                            </div>
+                                            {sortedCurrencies.other.map((currency: string) => (
+                                                <button 
+                                                    key={currency} 
+                                                    className="w-full hover:border border-gray-600 flex justify-start p-3 rounded-lg cursor-pointer"
+                                                    onClick={() => {
+                                                        setRECEIVE(currency)
+                                                        SetMenuReceive(false)
+                                                    }}
+                                                >
+                                                    {currency}
+                                                </button>
+                                            ))}
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
             
-            {/* Bottom Info Bar */}
             <div className="w-full h-fit py-2 flex items-center justify-between">
                 <div className="text-sm text-gray-400">
                     {prices && RECEIVE && (
