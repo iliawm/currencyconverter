@@ -230,15 +230,19 @@ const CheckRate = ({ data }: CheckRateProps) => {
                     )}
                 </div>
                 <div className="flex gap-2 w-fit h-fit items-center font-semibold mt-3">
-                    <button className="px-4 py-1 border border-[#cef739] rounded-xl text-sm bg-[#cef739] text-black flex gap-1 items-center hover:opacity-85 cursor-pointer transition-opacity">
+                    <button className="px-4 py-1 border border-[#cef739] rounded-xl text-sm bg-[#cef739] text-black flex gap-1 items-center hover:opacity-85 cursor-pointer transition-opacity" onClick={()=>{
+                        window.alert("feature needs either authentication or cookies and this is a mockup so i didnt program it")
+                    }}>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7.33199 2.41081C7.61324 1.84831 8.41012 1.87175 8.66793 2.41081L10.2148 5.528L13.6367 6.02019C14.2461 6.11394 14.4804 6.86394 14.0351 7.30925L11.5742 9.72331L12.1601 13.1218C12.2539 13.7311 11.5976 14.1999 11.0586 13.9186L8.01168 12.3014L4.94137 13.9186C4.4023 14.1999 3.74605 13.7311 3.8398 13.1218L4.42574 9.72331L1.9648 7.30925C1.51949 6.86394 1.75387 6.11394 2.36324 6.02019L5.80855 5.528L7.33199 2.41081Z" fill="#0A0A0A"/>
                         </svg>
                         FAVORITED
                     </button>
-                    <button className="px-4 py-1 border border-[#cef739] rounded-xl text-sm hover:opacity-85 cursor-pointer transition-opacity">
+                    <button className="px-4 py-1 border border-[#cef739] rounded-xl text-sm hover:opacity-85 cursor-pointer transition-opacity" onClick={()=>{
+                        window.alert("feature needs either authentication or cookies and this is a mockup so i didnt program it")
+                    }}>
                         LOG CONVERSION
-                    </button>
+                    </button >
                 </div>
             </div>
         </div>
