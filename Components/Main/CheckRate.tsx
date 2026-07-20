@@ -105,7 +105,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                 <input
                                     type="text"
                                     className="text-4xl font-bold border-none outline-none bg-transparent text-white w-40 "
-                                    placeholder="10"
+                                    placeholder="e.g 1000"
                                     value={valOne}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                         const value = e.target.value;

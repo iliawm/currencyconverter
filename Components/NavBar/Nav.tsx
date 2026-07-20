@@ -80,7 +80,7 @@ const Nav = async () => {
                     <h3>ECB DATA</h3>
                 </div>
             </div>
-            <div className="w-full h-full bg-neutral-700 relative overflow-x-scroll overflow-y-hidden items-center justify-start">
+            <div className="w-full h-full bg-neutral-700 relative overflow-x-scroll overflow-y-hidden items-center justify-start hidescroll">
                 {fetchError ? (
                     <div className="flex items-center justify-center w-full h-full text-white text-sm">
                         Failed to load currency data. Please try again later.

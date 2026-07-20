@@ -24,3 +24,11 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+.hidescroll::-webkit-scrollbar {
+    display: none;
+}
+
+.hidescroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
