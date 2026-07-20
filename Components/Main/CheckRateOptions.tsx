@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Ratecards from "../NavBar/Ui/Ratecards"
 
+
 const CheckRateOptions = () => {
     const [index , setIndex]= useState(0)
     // const [code , setCode]= useState()

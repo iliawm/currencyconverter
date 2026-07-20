@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useMemo } from "react"
+import CheckRateOptions from "./CheckRateOptions"
 
 interface CurrencyData {
     base: string
@@ -60,6 +61,10 @@ const CheckRate = ({ data }: CheckRateProps) => {
     }, [Send])
     
     return (
+        <>
+        <h1 className="text-lg md:text-lg md:font-bold">CHECK THE RATE</h1>
+        <div className="bg-[#171719] w-full h-fit px-4 py-5 rounded-2xl">
+
         <div className='flex-col w-full flex h-fit'>
             <div className='topcomp flex items-center justify-between gap-5 md:gap-8 border-b border-dotted border-gray-600 pb-5'>
                 <div className='w-full h-fit bg-[#202022] flex flex-col p-4 rounded-2xl gap-8 py-4 border border-white/5'>
@@ -245,7 +250,12 @@ const CheckRate = ({ data }: CheckRateProps) => {
                     </button >
                 </div>
             </div>
+           
         </div>
+        </div>
+        <CheckRateOptions />
+
+        </>
     )
 }
 
