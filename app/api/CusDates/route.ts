@@ -1,9 +1,11 @@
+
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const datesParam = searchParams.get('dates');
     const from = searchParams.get('from') || 'USD';
+    const to = searchParams.get('to') || 'EUR';
 
     if (!datesParam) {
         return NextResponse.json({ error: 'Missing dates parameter' }, { status: 400 });
@@ -16,7 +18,7 @@ export async function GET(request: Request) {
         try {
             const res = await fetch(`https://api.frankfurter.app/${dateStr}?from=${from}`);
             const data = await res.json();
-            const rate = data.rates?.EUR || 0;
+            const rate = data.rates?.[to] ?? 0;
             results.push({ date: dateStr, rate });
         } catch {
             results.push({ date: dateStr, rate: null });
