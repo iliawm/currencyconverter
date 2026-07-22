@@ -1,29 +1,18 @@
+// app/components/Nav.tsx
 
 import Link from "next/link"
-import { headers } from "next/headers"
 import Currencies from "./Ui/Currencies"
 
 const Nav = async () => {
     let Amount: number | null = null
     let currencyData: Array<{ pair: string; rate: string; change: string; isPositive: boolean }> = []
     let fetchError = false
-    
+
     try {
-        const headersList = await headers()
-        const host = headersList.get("host") || "localhost:3000"
-        const protocol = process.env.NODE_ENV === "development" ? "http" : "https"
-        const baseUrl = `${protocol}://${host}`
-        
-        const res = await fetch(`${baseUrl}/api/rates?from=USD`)
-        const data = await res.json()
-        
-        const currencies = Object.keys(data.rates)
-        Amount = currencies.length
-        
         const yesterday = new Date()
         yesterday.setDate(yesterday.getDate() - 1)
         const dateStr = yesterday.toISOString().split('T')[0]
-        
+
         const pairs = [
             { from: 'USD', to: 'JPY' },
             { from: 'GBP', to: 'USD' },
@@ -32,23 +21,23 @@ const Nav = async () => {
             { from: 'AUD', to: 'USD' },
             { from: 'USD', to: 'CAD' }
         ]
-        
-        const currentPromises = pairs.map((pair) =>
-            fetch(`https://api.frankfurter.app/latest?from=${pair.from}&to=${pair.to}`)
-                .then(res => res.json())
-                .then(res => ({ pair, currentRate: res.rates[pair.to] }))
-        )
-        
-        const currentData = await Promise.all(currentPromises)
-        
-        const oldPromises = pairs.map((pair) =>
-            fetch(`https://api.frankfurter.app/${dateStr}?from=${pair.from}&to=${pair.to}`)
-                .then(res => res.json())
-                .then(res => ({ pair, oldRate: res.rates[pair.to] }))
-        )
-        
-        const oldData = await Promise.all(oldPromises)
-        
+
+        const [allRatesRes, currentData, oldData] = await Promise.all([
+            fetch(`https://api.frankfurter.app/latest?from=USD`).then(res => res.json()),
+            Promise.all(pairs.map((pair) =>
+                fetch(`https://api.frankfurter.app/latest?from=${pair.from}&to=${pair.to}`)
+                    .then(res => res.json())
+                    .then(res => ({ pair, currentRate: res.rates[pair.to] }))
+            )),
+            Promise.all(pairs.map((pair) =>
+                fetch(`https://api.frankfurter.app/${dateStr}?from=${pair.from}&to=${pair.to}`)
+                    .then(res => res.json())
+                    .then(res => ({ pair, oldRate: res.rates[pair.to] }))
+            ))
+        ])
+
+        Amount = Object.keys(allRatesRes.rates).length
+
         currencyData = currentData.map((current, index) => {
             const old = oldData[index]
             const changePercent = ((current.currentRate - old.oldRate) / old.oldRate) * 100
@@ -59,12 +48,12 @@ const Nav = async () => {
                 isPositive: changePercent >= 0
             }
         })
-        
+
     } catch (err) {
         fetchError = true
         console.error('Error fetching data:', err)
     }
-    
+
     return (
         <div className="flex w-full h-32 flex-col">
             <div className='w-full h-20 bg-[#0a0a0a] flex p-1 gap-4 shrink-0'>
