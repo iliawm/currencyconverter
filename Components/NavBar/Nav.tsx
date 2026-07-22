@@ -1,13 +1,19 @@
+
 import Link from "next/link"
+import { headers } from "next/headers"
 import Currencies from "./Ui/Currencies"
 
 const Nav = async () => {
     let Amount: number | null = null
     let currencyData: Array<{ pair: string; rate: string; change: string; isPositive: boolean }> = []
     let fetchError = false
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
     
     try {
+        const headersList = await headers()
+        const host = headersList.get("host") || "localhost:3000"
+        const protocol = process.env.NODE_ENV === "development" ? "http" : "https"
+        const baseUrl = `${protocol}://${host}`
+        
         const res = await fetch(`${baseUrl}/api/rates?from=USD`)
         const data = await res.json()
         
@@ -28,7 +34,7 @@ const Nav = async () => {
         ]
         
         const currentPromises = pairs.map((pair) =>
-            fetch(`https://api.frankfurter.app/latest?from=${pair.from}&to=${pair.to}`)  // ✅ Fixed: removed stray `,{cache:'no-store'}` inside URL
+            fetch(`https://api.frankfurter.app/latest?from=${pair.from}&to=${pair.to}`)
                 .then(res => res.json())
                 .then(res => ({ pair, currentRate: res.rates[pair.to] }))
         )
@@ -56,7 +62,7 @@ const Nav = async () => {
         
     } catch (err) {
         fetchError = true
-        console.error('Error fetching data:', err)  // Check your terminal for this
+        console.error('Error fetching data:', err)
     }
     
     return (
