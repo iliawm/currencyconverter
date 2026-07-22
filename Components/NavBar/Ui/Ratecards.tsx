@@ -33,6 +33,7 @@ const Ratecards = ({ Last, Open, calc, calcp }: RatecardsProps) => {
                 <div className='tag text-[12px]'>% CHANGE</div>
                 <div className={getChangeColor(calcp)}>{calcp !== null ? calcp : "-"}</div>
             </div>
+            
         </div>
     );
 };

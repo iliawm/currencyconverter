@@ -131,7 +131,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                         </div>
                                     </div>
                                     {menu && (
-                                        <div className="absolute w-90 top-10 h-120 bg-[#202022] border border-gray-600 right-0 rounded-xl p-3 flex-col flex items-start gap-3 px-4 overflow-x-hidden overflow-y-scroll">
+                                        <div className="absolute w-90 top-10 h-120 bg-[#202022] border border-gray-600 right-0 rounded-xl p-3 flex-col flex items-start gap-3 px-4 overflow-x-hidden overflow-y-scroll z-20">
                                             {sortedCurrencies.popular.length > 0 && (
                                                 <>
                                                     <div className="w-full text-xs font-semibold text-neutral-400 uppercase tracking-wider px-2">
@@ -286,6 +286,9 @@ const CheckRate = ({ data }: CheckRateProps) => {
                 Last={prices?.[RECEIVE] ?? null}
                 calc={change}
                 calcp={changeP}
+                send={Send}
+                Recieve={RECEIVE}
+                
             />
         </>
     );
