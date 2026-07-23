@@ -96,9 +96,9 @@ const CheckRate = ({ data }: CheckRateProps) => {
     return (
         <>
             <h1 className="text-lg md:text-lg md:font-bold">CHECK THE RATE</h1>
-            <div className="bg-[#171719] w-full h-fit px-4 py-5 rounded-2xl">
+            <div className="bg-[#171719] w-full h-fit px-4 py-5 rounded-2xl ">
                 <div className='flex-col w-full flex h-fit'>
-                    <div className='topcomp flex items-center justify-between gap-5 md:gap-8 border-b border-dotted border-gray-600 pb-5'>
+                    <div className='topcomp flex items-center justify-between gap-5 md:gap-8 border-b border-dotted border-gray-600 pb-5 flex-col md:flex-row'>
                         <div className='w-full h-fit bg-[#202022] flex flex-col p-4 rounded-2xl gap-8 py-4 border border-white/5'>
                             <h1 className="text-neutral-100/50 text-xs font-semibold">SEND</h1>
                             <div className="w-full flex justify-between h-fit items-center">
@@ -131,7 +131,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                         </div>
                                     </div>
                                     {menu && (
-                                        <div className="absolute w-90 top-10 h-120 bg-[#202022] border border-gray-600 right-0 rounded-xl p-3 flex-col flex items-start gap-3 px-4 overflow-x-hidden overflow-y-scroll z-20">
+                                        <div className="absolute w-40 md:w-90 top-10 h-120 bg-[#202022] border border-gray-600 right-0 rounded-xl p-3 flex-col flex items-start gap-3 px-4 overflow-x-hidden overflow-y-scroll z-20">
                                             {sortedCurrencies.popular.length > 0 && (
                                                 <>
                                                     <div className="w-full text-xs font-semibold text-neutral-400 uppercase tracking-wider px-2">
@@ -177,7 +177,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                         </div>
 
                         <button
-                            className="bg-[#202022] p-4 rounded-xl border border-white/5 hover:bg-[#2e2e2e] transition-colors"
+                            className="bg-[#202022] p-4 rounded-xl border border-white/5 hover:bg-[#2e2e2e] transition-colors "
                             onClick={() => {
                                 const temp = Send;
                                 setSend(RECEIVE);
@@ -186,7 +186,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                 setValTwo("");
                             }}
                         >
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="-rotate-90 md:rotate-0">
                                 <path d="M6 9L2 5L6 1M2 5H18M14 11L18 15L14 19M18 15H2" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </button>
@@ -257,7 +257,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                         </div>
                     </div>
 
-                    <div className="w-full h-fit py-2 flex items-center justify-between">
+                    <div className="w-full h-fit py-2 flex items-center justify-between flex-col md:flex-row">
                         <div className="text-sm text-gray-400">
                             {prices && RECEIVE && (
                                 <>1 {Send} = {prices[RECEIVE]} {RECEIVE}</>
