@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Ratecards from "../NavBar/Ui/Ratecards";
 import { Line, LineChart, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
@@ -21,6 +21,7 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send }: CheckRateO
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [timestamp, setTimestamp] = useState("");
+    const [width, setWidth] = useState<number | null>(null);
 
     useEffect(() => {
         setTimestamp(
@@ -31,6 +32,13 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send }: CheckRateO
                 minute: "2-digit",
             })
         );
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     const generateLabels = (days: number): string[] => {
@@ -127,7 +135,7 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send }: CheckRateO
             case 0:
                 return (
                     <div className="History w-full h-fit gap-5 flex-col flex items-start justify-center">
-                        <div className="stats flex justify-between items-center w-full">
+                        <div className="stats flex justify-between md:items-center w-full flex-col md:flex-row items-start">
                             <Ratecards Last={Last} Open={Open} calc={calc} calcp={calcp} />
                             <div className="flex items-center bg-[#171719] px-2 rounded-lg py-2 text-xs mt-5 font-bold">
                                 <button
@@ -289,42 +297,43 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send }: CheckRateO
         }
     };
 
+    const tabs = ["HISTORY", "COMPARE", "FAVORITES", "LOG"];
+
+    if (width === null) {
+        return <div className="w-full h-20 animate-pulse bg-gray-800/20 rounded"></div>;
+    }
+
+    const isMobile = width < 768;
+
     return (
         <div className="w-full flex flex-col h-fit">
-            <div className="flex gap-5 border-b border-gray-800 w-full font-bold text-sm">
-                <button
-                    className={`cursor-pointer hover:opacity-90 border-b ${
-                        index === 0 ? "border-[#778b2d]" : "border-gray-800"
-                    } pb-4`}
-                    onClick={() => setIndex(0)}
+            {isMobile ? (
+                <select
+                    className="w-full  md:bg-transparent border rounded-xl bg-[#171719] md:border-b border-gray-800 text-white font-bold text-sm py-4 outline-none"
+                    value={index}
+                    onChange={(e) => setIndex(Number(e.target.value))}
                 >
-                    HISTORY
-                </button>
-                <button
-                    className={`cursor-pointer hover:opacity-90 border-b ${
-                        index === 1 ? "border-[#778b2d]" : "border-gray-800"
-                    } pb-4`}
-                    onClick={() => setIndex(1)}
-                >
-                    COMPARE
-                </button>
-                <button
-                    className={`cursor-pointer hover:opacity-90 border-b ${
-                        index === 2 ? "border-[#778b2d]" : "border-gray-800"
-                    } pb-4`}
-                    onClick={() => setIndex(2)}
-                >
-                    FAVORITES
-                </button>
-                <button
-                    className={`cursor-pointer hover:opacity-90 border-b ${
-                        index === 3 ? "border-[#778b2d]" : "border-gray-800"
-                    } pb-4`}
-                    onClick={() => setIndex(3)}
-                >
-                    LOG
-                </button>
-            </div>
+                    {tabs.map((tab, i) => (
+                        <option key={i} value={i} className="bg-[#171719] text-white ">
+                            {tab}
+                        </option>
+                    ))}
+                </select>
+            ) : (
+                <div className="flex gap-5 border-b border-gray-800 w-full font-bold text-sm">
+                    {tabs.map((tab, i) => (
+                        <button
+                            key={i}
+                            className={`cursor-pointer hover:opacity-90 border-b ${
+                                index === i ? "border-[#778b2d]" : "border-gray-800"
+                            } pb-4`}
+                            onClick={() => setIndex(i)}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+            )}
             <div>{renderContent()}</div>
         </div>
     );

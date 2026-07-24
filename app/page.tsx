@@ -24,7 +24,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="w-full h-full flex items-start justify-center md:px-20 lg::px-30 overflow-x-hidden px-5">
+    <main className="w-full h-full flex items-start justify-center md:px-20fire lg::px-30 overflow-x-hidden px-5">
       <section className="CheckRate w-full h-fit flex flex-col md:mt-15 mt-10 gap-10">
           {currencies ? (
             <CheckRate data={currencies} />
