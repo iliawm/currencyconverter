@@ -309,7 +309,7 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send }: CheckRateO
         <div className="w-full flex flex-col h-fit">
             {isMobile ? (
                 <select
-                    className="w-full  md:bg-transparent border rounded-xl bg-[#171719] md:border-b border-gray-800 text-white font-bold text-sm py-4 outline-none"
+                    className="w-full pl-5 md:pl-0 md:bg-transparent border rounded-xl bg-[#171719] md:border-b border-gray-800 text-white font-bold text-sm py-4 outline-none"
                     value={index}
                     onChange={(e) => setIndex(Number(e.target.value))}
                 >
