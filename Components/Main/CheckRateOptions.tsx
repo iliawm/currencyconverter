@@ -337,7 +337,7 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <div className="flex flex-col">
-                                        <div>{}</div>
+                                        <div>amount</div>
                                         <div>price</div>
                                     </div>
                                     <button className="w-10 h-10 flex items-center justify-center p-3 border rounded-xl">
