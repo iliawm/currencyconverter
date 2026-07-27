@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Ratecards from "../NavBar/Ui/Ratecards";
 import { Line, LineChart, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import Image from "next/image";
 
 interface CheckRateOptionsProps {
     Last: number | null;
@@ -13,7 +14,7 @@ interface CheckRateOptionsProps {
     send?: string;
 }
 
-const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send }: CheckRateOptionsProps) => {
+const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo,currencies,prices }: CheckRateOptionsProps) => {
     const [index, setIndex] = useState(0);
     const [active, setactive] = useState(3);
     const [period, setPeriod] = useState<number>(90);
@@ -129,7 +130,11 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send }: CheckRateO
         const dateList = generateLabels(period);
         fetchRates(dateList);
     };
-
+    useEffect(()=>{
+        if(prices){
+            // console.log(prices)
+        }
+    })
     const renderContent = () => {
         switch (index) {
             case 0:
@@ -292,6 +297,75 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send }: CheckRateO
                         </div>
                     </div>
                 );
+                case 1:
+                return (
+                    <div className="px-10 py-5">
+                <div className="bg-[#171719] h-fit w-full flex flex-col md:p-10 rounded-xl">
+                    <div className="flex justify-between mb-5">
+                        <div className="flex gap-4 ">
+                            <div className="text-sm font-bold opacity-60">MULTI-CURRENCY</div>
+                            <div>{valone?<div className="font-semibold  flex gap-3"> 
+                            <span>{valone}</span>
+                            <span>FROM</span>
+                            <span>{send}</span>
+                            </div>
+                            :<div className="text-red-400 md:text-sm text-[12px]">Enter value FOR {send}</div>
+                            }
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <div>
+                                    a
+                            </div>
+                            <div>
+                                PAIRS
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                        {Object.keys(currencies).map((e,index)=>{
+                            return(
+                                <div className="w-full h-fit py-3 flex justify-between bg-[#202022] rounded-xl border border-gray-700 px-4 hover:border-amber-200 cursor-pointer">
+                                    <div className="flex gap-3">
+                                <div className="flags "><Image src={`/Untitled.png`} alt="image" width={300} height={300} loading="lazy" className="w-10 "/></div>
+
+                                    <div className="flex flex-col">
+                                        <div>{e}</div>
+                                        <div className="text-xs text-red-400">Countries missing from free api</div>
+                                        </div>
+
+                                </div>
+                                <div className="flex gap-2 items-center">
+                                    <div className="flex flex-col">
+                                        <div>{}</div>
+                                        <div>price</div>
+                                    </div>
+                                    <button className="w-10 h-10 flex items-center justify-center p-3 border rounded-xl">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinejoin="round"
+                                                />
+                                            </svg>
+                                    </button>
+
+                                </div>
+                                
+                                </div>
+                            )
+                        })}
+                        
+                    </div>
+                </div>
+                </div>)
             default:
                 return null;
         }

@@ -39,7 +39,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
         try {
             const response = await fetch(`/api/rates?from=${Send}`);
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setPrices(data.rates);
         } catch (error) {
             console.error('Error fetching rates:', error);
@@ -50,7 +50,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
         try {
             const response = await fetch(`/api/oldrates?from=${Send}`);
             const data = await response.json();
-            console.log("old", data.rates);
+            // console.log("old", data.rates);
             setOld(data.rates);
         } catch {
             // ignore
@@ -288,6 +288,10 @@ const CheckRate = ({ data }: CheckRateProps) => {
                 calcp={changeP}
                 send={Send}
                 Recieve={RECEIVE}
+                valone={valOne}
+                valtwo={valTwo}
+                currencies = {currencies}
+                prices={prices}
                 
             />
         </>
