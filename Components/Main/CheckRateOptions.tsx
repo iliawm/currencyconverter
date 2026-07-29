@@ -12,6 +12,10 @@ interface CheckRateOptionsProps {
     calcp: string | null;
     Recieve?: string;
     send?: string;
+    valone?: string;        
+    valtwo?: string;      
+    currencies?: Record<string, number>;  
+    prices?: Record<string, number> | null;  
 }
 
 const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo,currencies,prices }: CheckRateOptionsProps) => {
@@ -23,7 +27,30 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo
     const [error, setError] = useState(false);
     const [timestamp, setTimestamp] = useState("");
     const [width, setWidth] = useState<number | null>(null);
-
+    const [pairs,setPairs]=useState(0)
+    const [each,Seteach]=useState<string[][]>([])
+    const [amount,Setamount]=useState<(string|number)[][]>([])
+   const handleCalculations = () => {
+    if (!prices) {
+        Setamount([])
+        return
+    }
+    
+    const data = Object.entries(prices)
+    const transformed = data.map(([currency, rate]) => {
+        const newRate = (Number(rate) * Number(valone)).toFixed(2)  
+        return [currency, newRate]
+    })
+    const oneval = data.map(([currency, rate]) => {
+        const newRate = Number(rate).toFixed(2)
+        return [currency, newRate]
+    })
+    Setamount(transformed)
+    Seteach(oneval)
+}
+    useEffect(()=>{
+        handleCalculations()
+    },[valone,prices])
     useEffect(() => {
         setTimestamp(
             new Date().toLocaleString("en-US", {
@@ -131,10 +158,12 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo
         fetchRates(dateList);
     };
     useEffect(()=>{
-        if(prices){
-            // console.log(prices)
+        if(currencies){
+            setPairs(Object.keys(currencies).length)
+            console.log(pairs)
         }
     })
+
     const renderContent = () => {
         switch (index) {
             case 0:
@@ -299,7 +328,7 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo
                 );
                 case 1:
                 return (
-                    <div className="px-10 py-5">
+                    <div className="md:px-10 py-5">
                 <div className="bg-[#171719] h-fit w-full flex flex-col md:p-10 rounded-xl">
                     <div className="flex justify-between mb-5">
                         <div className="flex gap-4 ">
@@ -313,9 +342,9 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo
                             }
                             </div>
                         </div>
-                        <div className="flex gap-3">
-                            <div>
-                                    a
+                        <div className="flex gap-2 opacity-75  ">
+                            <div className="">
+                                    {pairs}
                             </div>
                             <div>
                                 PAIRS
@@ -323,49 +352,59 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo
                         </div>
                     </div>
                     <div className="flex flex-col gap-3">
-                        {Object.keys(currencies).map((e,index)=>{
-                            return(
-                                <div className="w-full h-fit py-3 flex justify-between bg-[#202022] rounded-xl border border-gray-700 px-4 hover:border-amber-200 cursor-pointer">
-                                    <div className="flex gap-3">
-                                <div className="flags "><Image src={`/Untitled.png`} alt="image" width={300} height={300} loading="lazy" className="w-10 "/></div>
-
-                                    <div className="flex flex-col">
-                                        <div>{e}</div>
-                                        <div className="text-xs text-red-400">Countries missing from free api</div>
-                                        </div>
-
-                                </div>
-                                <div className="flex gap-2 items-center">
-                                    <div className="flex flex-col">
-                                        <div>amount</div>
-                                        <div>price</div>
-                                    </div>
-                                    <button className="w-10 h-10 flex items-center justify-center p-3 border rounded-xl">
-                                            <svg
-                                                width="24"
-                                                height="24"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinejoin="round"
-                                                />
-                                            </svg>
-                                    </button>
-
-                                </div>
-                                
-                                </div>
-                            )
-                        })}
-                        
+    {amount.map(([currency, rate], index) => {
+        const price = each[index][1]
+        return (
+            <div key={index} className="w-full h-fit py-3 flex justify-between bg-[#202022] rounded-xl border border-gray-700 px-4 hover:border-amber-200 cursor-pointer">
+                <div className="flex gap-3">
+                    <div className="flags rounded-full">
+                        <Image src={`/Untitled.png`} alt="image" width={300} height={300} loading="lazy" className="w-10 rounded-full"/>
+                    </div>
+                    <div className="flex flex-col">
+                        <div>{currency}</div>
+                        <div className="text-xs opacity-60">name not included</div>
                     </div>
                 </div>
+                <div className="flex gap-3 items-center">
+                    <div className="flex flex-col items-end">
+                        <div className="text-white text-xl">{rate}</div>
+                        <div className="text-white text-xs opacity-75">@ {price}</div>
+                    </div>
+                    <button className="w-10 h-10 flex items-center justify-center p-3 border rounded-xl cursor-pointer hover:border-[#cef739]" onClick={()=>{
+                        window.alert("no account to save favorites")
+                    }}>
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="hover:border-[#cef739]"
+                        >
+                            <path
+                                d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinejoin="round"
+                                className="hover:border-[#cef739]"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        )
+    })}
+</div>
+                </div>
                 </div>)
+                case 2 :
+                    return(
+                        <div className="w-full flex justify-center py-10 text-xl text-red-400">Feature Not Implemented Because there is not authentication on the project</div>
+                    )
+                    case 3 :
+                    return(
+                        <div className="w-full flex justify-center py-10 text-xl text-red-400">Feature Not Implemented Because there is not authentication on the project</div>
+                    )
             default:
                 return null;
         }

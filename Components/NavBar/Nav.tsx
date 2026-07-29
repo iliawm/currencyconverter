@@ -68,7 +68,7 @@ const Nav = async () => {
                     </Link>
                 </div>
                 <div className="w-full flex items-center h-full justify-around md:justify-end md:pr-5 text-neutral-200 text-[10px] md:gap-4 text-pretty pl-2 md:font-medium md:text-[0.9rem]">
-                    <h3>{Amount ?? '...'} CURRENCIES</h3>
+                    <div>{Amount ?? '...'} CURRENCIES</div>
                     <div>.</div>
                     <h3>EOD</h3>
                     <div>.</div>

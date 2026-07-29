@@ -39,7 +39,6 @@ const CheckRate = ({ data }: CheckRateProps) => {
         try {
             const response = await fetch(`/api/rates?from=${Send}`);
             const data = await response.json();
-            // console.log(data);
             setPrices(data.rates);
         } catch (error) {
             console.error('Error fetching rates:', error);
@@ -50,7 +49,6 @@ const CheckRate = ({ data }: CheckRateProps) => {
         try {
             const response = await fetch(`/api/oldrates?from=${Send}`);
             const data = await response.json();
-            // console.log("old", data.rates);
             setOld(data.rates);
         } catch {
             // ignore
@@ -96,7 +94,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
     return (
         <>
             <h1 className="text-lg md:text-lg md:font-bold">CHECK THE RATE</h1>
-            <div className="bg-[#171719] w-full h-fit px-4 py-5 rounded-2xl ">
+            <div className="bg-[#171719] w-full h-fit px-2 py-5 rounded-2xl md:px-4 ">
                 <div className='flex-col w-full flex h-fit'>
                     <div className='topcomp flex items-center justify-between gap-5 md:gap-8 border-b border-dotted border-gray-600 pb-5 flex-col md:flex-row'>
                         <div className='w-full h-fit bg-[#202022] flex flex-col p-4 rounded-2xl gap-8 py-4 border border-white/5'>
@@ -121,7 +119,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                     className="border relative rounded-sm border-white/5 px-5 py-1 bg-[#2e2e2e] gap-2 flex cursor-pointer"
                                     onClick={() => SetMenu(!menu)}
                                 >
-                                    <div className={`flex justify-between gap-2 items-center `}>
+                                    <div className={`flex justify-between gap-2 items-center`}>
                                         <div className="flag"></div>
                                         <div>{Send}</div>
                                         <div className={`${menu ? "rotate-180" : "rotate-0"} transition-all ease-linear`}>
@@ -140,13 +138,18 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                                     {sortedCurrencies.popular.map((currency: string) => (
                                                         <button
                                                             key={currency}
-                                                            className="w-full hover:border border-gray-600 flex justify-start p-3 rounded-lg cursor-pointer"
+                                                            className="w-full hover:border border-gray-600 flex justify-between items-center p-3 rounded-lg cursor-pointer"
                                                             onClick={() => {
                                                                 setSend(currency);
                                                                 SetMenu(false);
                                                             }}
                                                         >
-                                                            {currency}
+                                                            <span>{currency}</span>
+                                                            {Send === currency && (
+                                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#cef739" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                </svg>
+                                                            )}
                                                         </button>
                                                     ))}
                                                 </>
@@ -159,13 +162,18 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                                     {sortedCurrencies.other.map((currency: string) => (
                                                         <button
                                                             key={currency}
-                                                            className="w-full hover:border border-gray-600 flex justify-start p-3 rounded-lg cursor-pointer"
+                                                            className="w-full hover:border border-gray-600 flex justify-between items-center p-3 rounded-lg cursor-pointer"
                                                             onClick={() => {
                                                                 setSend(currency);
                                                                 SetMenu(false);
                                                             }}
                                                         >
-                                                            {currency}
+                                                            <span>{currency}</span>
+                                                            {Send === currency && (
+                                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#cef739" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                </svg>
+                                                            )}
                                                         </button>
                                                     ))}
                                                 </>
@@ -177,7 +185,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                         </div>
 
                         <button
-                            className="bg-[#202022] p-4 rounded-xl border border-white/5 hover:bg-[#2e2e2e] transition-colors "
+                            className="bg-[#202022] p-4 rounded-xl border border-white/5 hover:bg-[#2e2e2e] transition-colors"
                             onClick={() => {
                                 const temp = Send;
                                 setSend(RECEIVE);
@@ -201,7 +209,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                     className="border relative rounded-sm border-white/5 px-5 py-1 bg-[#2e2e2e] gap-2 flex cursor-pointer"
                                     onClick={() => SetMenuReceive(!menuReceive)}
                                 >
-                                    <div className={`flex justify-between gap-2 items-center `}>
+                                    <div className={`flex justify-between gap-2 items-center`}>
                                         <div className="flag"></div>
                                         <div>{RECEIVE}</div>
                                         <div className={`${menuReceive ? "rotate-180" : "rotate-0"} transition-all ease-linear`}>
@@ -211,7 +219,7 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                         </div>
                                     </div>
                                     {menuReceive && (
-                                        <div className="absolute w-40  lg:w-90 top-10 h-120 bg-[#202022] border border-gray-600 right-0 rounded-xl p-3 flex-col flex items-start gap-3 px-4 overflow-x-hidden overflow-y-scroll z-20">
+                                        <div className="absolute w-40 lg:w-90 top-10 h-120 bg-[#202022] border border-gray-600 right-0 rounded-xl p-3 flex-col flex items-start gap-3 px-4 overflow-x-hidden overflow-y-scroll z-20">
                                             {sortedCurrencies.popular.length > 0 && (
                                                 <>
                                                     <div className="w-full text-xs font-semibold text-neutral-400 uppercase tracking-wider px-2">
@@ -220,13 +228,18 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                                     {sortedCurrencies.popular.map((currency: string) => (
                                                         <button
                                                             key={currency}
-                                                            className="w-full hover:border border-gray-600 flex justify-start p-3 rounded-lg cursor-pointer"
+                                                            className="w-full hover:border border-gray-600 flex justify-between items-center p-3 rounded-lg cursor-pointer"
                                                             onClick={() => {
                                                                 setRECEIVE(currency);
                                                                 SetMenuReceive(false);
                                                             }}
                                                         >
-                                                            {currency}
+                                                            <span>{currency}</span>
+                                                            {RECEIVE === currency && (
+                                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#cef739" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                </svg>
+                                                            )}
                                                         </button>
                                                     ))}
                                                 </>
@@ -239,13 +252,18 @@ const CheckRate = ({ data }: CheckRateProps) => {
                                                     {sortedCurrencies.other.map((currency: string) => (
                                                         <button
                                                             key={currency}
-                                                            className="w-full hover:border border-gray-600 flex justify-start p-3 rounded-lg cursor-pointer"
+                                                            className="w-full hover:border border-gray-600 flex justify-between items-center p-3 rounded-lg cursor-pointer"
                                                             onClick={() => {
                                                                 setRECEIVE(currency);
                                                                 SetMenuReceive(false);
                                                             }}
                                                         >
-                                                            {currency}
+                                                            <span>{currency}</span>
+                                                            {RECEIVE === currency && (
+                                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#cef739" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                </svg>
+                                                            )}
                                                         </button>
                                                     ))}
                                                 </>
@@ -290,9 +308,8 @@ const CheckRate = ({ data }: CheckRateProps) => {
                 Recieve={RECEIVE}
                 valone={valOne}
                 valtwo={valTwo}
-                currencies = {currencies}
+                currencies={currencies}
                 prices={prices}
-                
             />
         </>
     );
