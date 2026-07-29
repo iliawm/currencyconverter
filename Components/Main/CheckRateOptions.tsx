@@ -399,11 +399,11 @@ const CheckRateOptions = ({ Last, Open, calc, calcp, Recieve, send,valone,valtwo
                 </div>)
                 case 2 :
                     return(
-                        <div className="w-full flex justify-center py-10 text-xl text-red-400">Feature Not Implemented Because there is not authentication on the project</div>
+                        <div className="w-full flex justify-center py-10 text-xl text-red-400">Feature Not Implemented Because there is no authentication on the project</div>
                     )
                     case 3 :
                     return(
-                        <div className="w-full flex justify-center py-10 text-xl text-red-400">Feature Not Implemented Because there is not authentication on the project</div>
+                        <div className="w-full flex justify-center py-10 text-xl text-red-400">Feature Not Implemented Because there is no authentication on the project</div>
                     )
             default:
                 return null;
